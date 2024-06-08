@@ -1,4 +1,4 @@
-export const publicRoutes = ['/'];
+export const publicRoutes = [''];
 
 // prefix for api authentication routes
 export const apiAuthPrefix = '/api/auth';

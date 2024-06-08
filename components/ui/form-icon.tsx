@@ -10,7 +10,7 @@ interface FormIconProps {
 
 const FormIcon = ({ children, className, icon: Icon }: FormIconProps) => {
     return (
-        <div className="relative">
+        <div className="relative z-1">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Icon className={cn('text-dark-500/80', className)} />
             </div>

@@ -14,8 +14,9 @@ interface AuthSession {
 }
 
 const createLdapClient = () => {
+    // url: 'ldap://10.0.2.53' || 'ldap:10.0.2.61',
     return new LdapClient({
-        url: 'ldap://10.0.2.53',
+        url: 'ldap://192.168.100.72',
         tlsOptions: { rejectUnauthorized: false },
     });
 };
@@ -39,10 +40,13 @@ export const authOptions: AuthOptions = {
                 session.user.password = token.password;
             }
 
-            return {
-                ...session,
-                user: { id: token.sub, username: token.username, email: token.email },
-            };
+            if (token.name && session.user) {
+                session.user.name = token.name;
+            }
+
+            console.log('session: ', session);
+
+            return session;
         },
 
         async jwt({ token, user, session }) {
@@ -50,8 +54,10 @@ export const authOptions: AuthOptions = {
 
             const existingUser = await getUserById(token.sub);
 
+            token.id = token.sub;
             token.email = existingUser?.email;
             token.username = existingUser?.username;
+            token.name = existingUser?.name;
 
             return token;
         },
@@ -84,11 +90,14 @@ export const authOptions: AuthOptions = {
                         };
 
                         const res: any = await client.search('DC=kemri,DC=org', options);
+                        console.log(res);
+
                         const user = await getUserByEmail(res[0]['userPrincipalName']);
 
-                        if (!user?.id) {
+                        if (!user?.id && res) {
                             const newUser = await db.user.create({
                                 data: {
+                                    name: res[0]['givenName'],
                                     username: res[0]['sAMAccountName'],
                                     email: res[0]['userPrincipalName'],
                                 },
@@ -98,7 +107,6 @@ export const authOptions: AuthOptions = {
                         }
 
                         if (user?.email === username) {
-                            console.log(res);
                             return user;
                         }
                     } catch (error) {

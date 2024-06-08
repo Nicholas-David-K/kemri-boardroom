@@ -1,12 +1,12 @@
 import './globals.css';
 
 import { AuthSessionProvider } from '@/providers/auth-session-provider';
-import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
+import { Public_Sans } from 'next/font/google';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 
-const inter = Inter({ subsets: ['latin'] });
+const public_sans = Public_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: 'Create Next App',
@@ -22,7 +22,7 @@ export default async function RootLayout({
 
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={public_sans.className}>
                 <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
             </body>
         </html>
