@@ -1,5 +1,6 @@
 'use client';
 
+import Header from './header';
 import { getGreeting } from '@/lib/utils';
 import { useCurrentUser } from '@/hooks/auth/use-current-user';
 
@@ -8,9 +9,10 @@ const Welcome = () => {
     const currentUser = useCurrentUser();
 
     return (
-        <div className="font-bold ml-2 text-2xl pt-10 pb-2 border-b">
-            {greeting}, {currentUser?.name}!
-        </div>
+        <Header
+            heading={`${greeting}, ${currentUser?.name}!`}
+            subtitle="Effortlessly reserve your boardroom and stay updated on ongoing meetings."
+        />
     );
 };
 

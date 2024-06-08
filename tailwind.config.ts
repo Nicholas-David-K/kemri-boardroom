@@ -39,6 +39,7 @@ const config = {
                 '4xl': '1900px',
             },
             colors: {
+                white: '#f6f2ff',
                 'primary-500': '#06abdd',
                 'primary-400': '#1e73be',
                 'dark-500': '#262626',

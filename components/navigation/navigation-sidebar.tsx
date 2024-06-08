@@ -54,16 +54,21 @@ const NavigationSidebar = () => {
         <div className="space-y-4 flex flex-col items-center h-full w-full py-3 bg-gradient-to-b from-primary-400 to-[#546FC2]">
             <Logo />
             {/* <NavigationAction /> */}
-            <Separator className="h-[2px] bg-white rounded-md w-10 mx-auto" />
+            <Separator className="h-[2px] bg-neutral-100 rounded-md w-10 mx-auto" />
             <ScrollArea className="flex-1 w-full">
                 {routes.map((route) => (
-                    <div key={route.href} className="mb-3">
+                    <div key={route.href} className="mb-2">
                         <NavigationItem route={route} />
                     </div>
                 ))}
             </ScrollArea>
             <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
-                <IoNotifications className="h-6 w-6 text-white" />
+                <div className="relative">
+                    <IoNotifications className="h-6 w-6 text-white" />
+                    <div className="absolute flex flex-col h-3 w-3 rounded-full items-center top-0 left-2 justify-center px-1 bg-rose-500 text-sm text-white">
+                        <span>1</span>
+                    </div>
+                </div>
 
                 <ActionTooltip side="top" align="center" label="Logout">
                     <button onClick={() => signOut()} className="group flex items-center mx-6">

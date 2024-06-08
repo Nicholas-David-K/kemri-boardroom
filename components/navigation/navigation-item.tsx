@@ -22,7 +22,7 @@ const NavigationItem = ({ route }: NavigationItemProps) => {
                     route.active && 'bg-white text-primary-400 font-semibold'
                 )}
             >
-                <route.icon className="h-6 w-6 mb-1.5 group-hover:scale-110 transition" />
+                <route.icon className="h-6 w-6 mb-1.5 group-hover:scale-110 transition-all" />
                 <p className="text-sm">{route.label}</p>
             </div>
         </Link>
