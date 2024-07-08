@@ -1,47 +1,40 @@
 'use client';
 
-import { FaCalendarAlt, FaPlusCircle } from 'react-icons/fa';
+import { MapPin, Users } from 'lucide-react';
 
-import ActionTooltip from '../action-tooltip';
+import ActionTooltip from '@/components/action-tooltip';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { GoHomeFill } from 'react-icons/go';
 import { IoNotifications } from 'react-icons/io5';
-import Logo from './logo';
-import NavigationAction from './navigation-action';
-import NavigationItem from './navigation-item';
+import Logo from '@/components/navigation/logo';
+import NavigationAction from '@/components/navigation/navigation-action';
+import NavigationItem from '@/components/navigation/navigation-item';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 
-const NavigationSidebar = () => {
+const DashboardSidebar = () => {
     const pathname = usePathname();
 
     const routes = [
         {
-            href: '/',
-            label: 'Homepage',
-            icon: GoHomeFill,
-            active: pathname === '/',
+            href: '/boardrooms',
+            label: 'Boardrooms',
+            icon: MapPin,
+            active: pathname === '/boardrooms',
         },
         {
-            href: '/calendar',
-            label: 'Calendar',
-            icon: FaCalendarAlt,
-            active: pathname === '/calendar',
-        },
-        {
-            href: '/add',
-            label: 'Add Room',
-            icon: FaPlusCircle,
-            active: pathname === '/add',
+            href: '/users',
+            label: 'Manage users',
+            icon: Users,
+            active: pathname === '/users',
         },
     ];
 
     return (
         <div className="space-y-4 flex flex-col items-center h-full w-full py-3 bg-gradient-to-b from-primary-400 to-[#546FC2]">
             <Logo />
-            {/* <NavigationAction /> */}
+            <NavigationAction />
 
             <Separator className="h-[2px] bg-neutral-100 rounded-md w-10 mx-auto" />
 
@@ -71,4 +64,4 @@ const NavigationSidebar = () => {
     );
 };
 
-export default NavigationSidebar;
+export default DashboardSidebar;

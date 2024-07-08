@@ -8,13 +8,58 @@ datasource db {
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
+//! DATABASE BY NEON TECH
+
+enum Locations {
+  mombasa
+  kisumu
+  nairobi
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum Amenities {
+  whiteboard
+  projection
+  internet
+  sound
+  telephone
+}
+
 model User {
-  id        String   @id @default(nanoid(10)) @map("_id")
-  username  String   @unique
-  name      String
-  email     String   @unique
+  id       String @id @default(nanoid(10)) @map("_id")
+  username String @unique
+  name     String
+  email    String @unique
+  role     Role   @default(user)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-//! DATABASE BY NEON TECH
+model Boardroom {
+  id          String      @id @default(nanoid(10)) @map("_id")
+  name        String
+  location    Locations   @default(nairobi)
+  description String
+  amenities   Amenities[]
+  image       Image[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id          String     @id @default(nanoid(10)) @map("_id")
+  url         String
+  boardroomId String
+  Boardroom   Boardroom? @relation(fields: [boardroomId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([boardroomId])
+}

@@ -273,7 +273,7 @@ export default function LoginPage() {
                                                                     },
                                                                 })}
                                                                 placeholder="email@kemri.go.ke"
-                                                                className="pl-10 focus-visible:ring-primary-500 py-6 text-sm bg-white"
+                                                                className="pl-10 focus-visible:ring-primary-500 py-6 text-sm bg-[#fff]"
                                                             />
                                                         </FormIcon>
                                                     </FormControl>
@@ -301,7 +301,7 @@ export default function LoginPage() {
                                                                         required:
                                                                             'This is required',
                                                                     })}
-                                                                    className="pl-10 focus-visible:ring-primary-500 py-6 text-sm bg-white"
+                                                                    className="pl-10 focus-visible:ring-primary-500 py-6 text-sm bg-[#fff]"
                                                                 />
                                                                 <Button
                                                                     type="button"

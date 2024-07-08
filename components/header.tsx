@@ -22,8 +22,8 @@ const Header = ({ heading, subtitle }: HeaderProps) => {
             >
                 <defs>
                     <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
-                        <stop stop-color="rgba(6, 171, 221, 0.4)" offset="0%"></stop>
-                        <stop stop-color="rgba(30, 115, 190, 0.4)" offset="100%"></stop>
+                        <stop stopColor="rgba(6, 171, 221, 0.4)" offset="0%"></stop>
+                        <stop stopColor="rgba(30, 115, 190, 0.4)" offset="100%"></stop>
                     </linearGradient>
                 </defs>
                 <path

@@ -14,9 +14,9 @@ interface AuthSession {
 }
 
 const createLdapClient = () => {
-    // url: 'ldap://10.0.2.53' || 'ldap:10.0.2.61',
     return new LdapClient({
-        url: 'ldap://192.168.100.72',
+        // url: 'ldap://192.168.100.72',
+        url: 'ldap://10.0.2.53' || 'ldap:10.0.2.61',
         tlsOptions: { rejectUnauthorized: false },
     });
 };
@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
     callbacks: {
         async session({ session, token }: AuthSession) {
             if (token.sub && session.user) {
-                session.user.id = token.id;
+                session.user.id = token.sub;
             }
 
             if (token.username && session.user) {
@@ -44,7 +44,11 @@ export const authOptions: AuthOptions = {
                 session.user.name = token.name;
             }
 
-            console.log('session: ', session);
+            if (token.role && session.user) {
+                session.user.role = token.role;
+            }
+
+            console.log('SESSION: ', session);
 
             return session;
         },
@@ -52,12 +56,16 @@ export const authOptions: AuthOptions = {
         async jwt({ token, user, session }) {
             if (!token.sub) return token;
 
+            console.log('USER: ', user);
+
             const existingUser = await getUserById(token.sub);
 
-            token.id = token.sub;
             token.email = existingUser?.email;
             token.username = existingUser?.username;
             token.name = existingUser?.name;
+            token.role = existingUser?.role;
+
+            console.log('TOKEN: ', token);
 
             return token;
         },
@@ -86,13 +94,15 @@ export const authOptions: AuthOptions = {
                         const options: LdapClient.SearchOptions = {
                             filter: `userPrincipalName=${username}`,
                             scope: 'sub',
-                            attributes: [],
+                            attributes: ['*'],
                         };
 
                         const res: any = await client.search('DC=kemri,DC=org', options);
                         console.log(res);
 
                         const user = await getUserByEmail(res[0]['userPrincipalName']);
+
+                        console.log('[USER]: ', user);
 
                         if (!user?.id && res) {
                             const newUser = await db.user.create({
@@ -106,9 +116,7 @@ export const authOptions: AuthOptions = {
                             return newUser;
                         }
 
-                        if (user?.email === username) {
-                            return user;
-                        }
+                        return user;
                     } catch (error) {
                         throw Error('Something went wrong!');
                     }

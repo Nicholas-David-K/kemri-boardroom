@@ -1,26 +1,33 @@
 'use client';
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-
 const Filter = () => {
+    const filterLinks = [
+        {
+            id: 1,
+            name: 'Upcoming',
+        },
+        {
+            id: 1,
+            name: 'Pending',
+        },
+        {
+            id: 1,
+            name: 'Past',
+        },
+        {
+            id: 1,
+            name: 'Cancelled',
+        },
+    ];
     return (
-        <div className="border p-2 rounded-lg">
-            <Select>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Capacity" />
-                </SelectTrigger>
-                {/* <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
-                </SelectContent> */}
-            </Select>
+        <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-6">
+                {filterLinks.map((item) => (
+                    <button className="font-medium" key={item.id}>
+                        {item.name}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
