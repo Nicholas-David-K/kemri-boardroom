@@ -22,7 +22,7 @@ const BoardroomItem = () => {
     return (
         <div>
             <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4">
-                <div className="rounded-lg bg-gray-200/30 p-6 group gap-4 relative">
+                <div className="rounded-lg bg-white-bg p-6 group gap-4 relative">
                     <div className="absolute shadow-lg rounded-lg -top-5 left-5 hidden 2xl:block">
                         <Image
                             src="/images/boardroom.jpg"
@@ -42,13 +42,13 @@ const BoardroomItem = () => {
                                     role="button"
                                     className="bg-white rounded-lg p-2.5 hover:bg-white/70 group/trash transition"
                                 >
-                                    <Trash className="h-4 w-4 group-hover/trash:text-red-500" />
+                                    <Trash className="h-4 w-4 group-hover/trash:text-red-500 group-hover/trash:scale-110 transition" />
                                 </div>
                                 <div
                                     role="button"
                                     className="bg-white rounded-lg p-2.5 hover:bg-white/70 group/edit transition"
                                 >
-                                    <Pencil className="h-4 w-4 group-hover/edit:text-teal-500" />
+                                    <Pencil className="h-4 w-4 group-hover/edit:text-teal-500 group-hover/edit:scale-110 transition" />
                                 </div>
                             </div>
                         </div>
