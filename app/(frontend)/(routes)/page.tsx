@@ -10,7 +10,6 @@ export default function Home() {
             <WidthWrapper>
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                     <div className="md:col-span-4 col-span-4 w-full">
-                        <Filter />
                         <BoardroomItem />
                     </div>
                     <div className="bg-primary-500 h-full w-full p-10 hidden lg:block"></div>

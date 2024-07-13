@@ -8,15 +8,15 @@ import NextAuth from 'next-auth/next';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { db } from '@/lib/db';
 
-interface AuthSession {
+export interface AuthSession {
     session: Session;
     token?: any;
 }
 
 const createLdapClient = () => {
     return new LdapClient({
-        // url: 'ldap://192.168.100.72',
-        url: 'ldap://10.0.2.53' || 'ldap:10.0.2.61',
+        url: 'ldap://192.168.100.72',
+        // url: 'ldap://10.0.2.53' || 'ldap:10.0.2.61',
         tlsOptions: { rejectUnauthorized: false },
     });
 };
@@ -48,15 +48,13 @@ export const authOptions: AuthOptions = {
                 session.user.role = token.role;
             }
 
-            console.log('SESSION: ', session);
+            // console.log('SESSION: ', session);
 
             return session;
         },
 
         async jwt({ token, user, session }) {
             if (!token.sub) return token;
-
-            console.log('USER: ', user);
 
             const existingUser = await getUserById(token.sub);
 
@@ -65,7 +63,7 @@ export const authOptions: AuthOptions = {
             token.name = existingUser?.name;
             token.role = existingUser?.role;
 
-            console.log('TOKEN: ', token);
+            // console.log('TOKEN: ', token);
 
             return token;
         },
@@ -98,11 +96,11 @@ export const authOptions: AuthOptions = {
                         };
 
                         const res: any = await client.search('DC=kemri,DC=org', options);
-                        console.log(res);
+                        // console.log(res);
 
                         const user = await getUserByEmail(res[0]['userPrincipalName']);
 
-                        console.log('[USER]: ', user);
+                        // console.log('[USER]: ', user);
 
                         if (!user?.id && res) {
                             const newUser = await db.user.create({

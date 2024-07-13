@@ -3,6 +3,8 @@ import './globals.css';
 import { AuthSessionProvider } from '@/providers/auth-session-provider';
 import type { Metadata } from 'next';
 import { Public_Sans } from 'next/font/google';
+import { QueryProvider } from '@/providers/query-provider';
+import { ToastProvider } from '@/providers/toast-provider';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 
@@ -23,7 +25,10 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={public_sans.className}>
-                <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
+                <AuthSessionProvider session={session}>
+                    <ToastProvider />
+                    <QueryProvider>{children}</QueryProvider>
+                </AuthSessionProvider>
             </body>
         </html>
     );

@@ -19,6 +19,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { useState, useTransition } from 'react';
 
 import { BoardroomSchema } from '@/schemas';
 import { Button } from '@/components/ui/button';
@@ -27,8 +28,10 @@ import ImageUpload from '@/components/image-upload';
 import { Input } from '@/components/input';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/textarea';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -44,7 +47,8 @@ const amenities = Object.keys(Amenities)
 //
 
 const BoardroomForm = () => {
-    const [loading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const form = useForm<BoardroomFormValues>({
         resolver: zodResolver(BoardroomSchema),
@@ -60,7 +64,20 @@ const BoardroomForm = () => {
     });
 
     const onSubmit = async (values: BoardroomFormValues) => {
-        console.log(values);
+        try {
+            setIsLoading(true);
+            await axios.post('/api/add-boardroom', values);
+            toast.success('Boardroom created!');
+            router.refresh();
+
+            setTimeout(() => {
+                router.push('/manage');
+            }, 1000);
+        } catch (error) {
+            toast.error('Something went wrong!');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -78,7 +95,7 @@ const BoardroomForm = () => {
                                             <FormLabel>Name</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    disabled={loading}
+                                                    disabled={isLoading}
                                                     {...field}
                                                     placeholder="Main boardroom"
                                                     className="focus-visible:ring-primary-500 py-5"
@@ -101,7 +118,7 @@ const BoardroomForm = () => {
                                                 <Input
                                                     type="number"
                                                     placeholder="32"
-                                                    disabled={loading}
+                                                    disabled={isLoading}
                                                     {...field}
                                                     className="focus-visible:ring-primary-500 py-5"
                                                 />
@@ -120,7 +137,7 @@ const BoardroomForm = () => {
                                         <FormItem>
                                             <FormLabel>Location</FormLabel>
                                             <Select
-                                                disabled={loading}
+                                                disabled={isLoading}
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 defaultValue={field.value}
@@ -156,7 +173,7 @@ const BoardroomForm = () => {
                                             <FormLabel>Description</FormLabel>
                                             <FormControl>
                                                 <Textarea
-                                                    disabled={loading}
+                                                    disabled={isLoading}
                                                     {...field}
                                                     className="focus-visible:ring-primary-500 py-5"
                                                 />
@@ -232,42 +249,7 @@ const BoardroomForm = () => {
                         </div>
 
                         <div>
-                            <FormField
-                                control={form.control}
-                                name="availability"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Availability</FormLabel>
-                                        <FormControl>
-                                            <ToggleGroup
-                                                size="sm"
-                                                variant="outline"
-                                                className="justify-start flex items-center w-full"
-                                                {...field}
-                                                onValueChange={(selectedValues) =>
-                                                    field.onChange(selectedValues)
-                                                }
-                                                type="multiple"
-                                            >
-                                                {[
-                                                    'Monday',
-                                                    'Tuesday',
-                                                    'Wednesday',
-                                                    'Thursday',
-                                                    'Friday',
-                                                ].map((day) => (
-                                                    <ToggleGroupItem key={day} value={day}>
-                                                        {day}
-                                                    </ToggleGroupItem>
-                                                ))}
-                                            </ToggleGroup>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <div className="mt-10">
+                            <div>
                                 <FormField
                                     control={form.control}
                                     name="images"
@@ -280,7 +262,7 @@ const BoardroomForm = () => {
                                             <FormControl>
                                                 <ImageUpload
                                                     value={field.value.map((image) => image.url)}
-                                                    disabled={loading}
+                                                    disabled={isLoading}
                                                     onChange={(url) =>
                                                         field.onChange([...field.value, { url }])
                                                     }
@@ -304,12 +286,12 @@ const BoardroomForm = () => {
 
                     <Button
                         size="lg"
-                        disabled={loading}
+                        disabled={isLoading}
                         className="ml-auto rounded-sm mt-10"
                         type="submit"
                     >
-                        {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                        {!loading && <CheckCheck className="h-4 w-4 mr-2" />}Create boardroom
+                        {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                        {!isLoading && <CheckCheck className="h-4 w-4 mr-2" />}Create boardroom
                     </Button>
                 </form>
             </Form>

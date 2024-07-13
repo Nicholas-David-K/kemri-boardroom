@@ -41,32 +41,19 @@ model User {
 }
 
 model Boardroom {
-  id           String         @id @default(nanoid(10)) @map("_id")
-  name         String
-  location     Locations      @default(Nairobi)
-  description  String
-  amenities    Amenities[]
-  capacity     Int
-  availability Availability[]
-  image        Image[]
-  active       Boolean        @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Availability {
-  id          String     @id @default(nanoid(10)) @map("_id")
-  day         String
+  id          String      @id @default(nanoid(10)) @map("_id")
+  name        String
+  location    Locations   @default(Nairobi)
+  description String
+  amenities   Amenities[]
+  capacity    Int
   startTime   String
   endTime     String
-  boardroomId String?
-  Boardroom   Boardroom? @relation(fields: [boardroomId], references: [id])
+  images      Image[]
+  active      Boolean     @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([boardroomId])
 }
 
 model Image {

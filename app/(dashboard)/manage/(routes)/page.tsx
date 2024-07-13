@@ -1,13 +1,19 @@
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Filter, PlusCircle } from 'lucide-react';
-
 import BoardroomItem from '@/components/boardroom-item';
+import BoardroomsContainer from '@/components/boardrooms-container';
+import { FilterModal } from '@/components/modals/filter-modal';
+import { Filters } from '@/types';
 import Link from 'next/link';
+import { PlusCircle } from 'lucide-react';
 import WelcomeHeader from '@/components/welcome-header';
 import WidthWrapper from '@/components/width-wrapper';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const DasshboardPage = () => {
+interface DasshboardPageProps {
+    searchParams: Filters;
+}
+
+const DasshboardPage = ({ searchParams }: DasshboardPageProps) => {
     return (
         <main>
             <WelcomeHeader />
@@ -20,7 +26,7 @@ const DasshboardPage = () => {
                                 className={cn(
                                     'group',
                                     buttonVariants({
-                                        variant: 'default',
+                                        variant: 'primary',
                                     })
                                 )}
                             >
@@ -30,9 +36,9 @@ const DasshboardPage = () => {
                                 />{' '}
                                 Add boardroom
                             </Link>
-                            <Filter />
+                            <FilterModal />
                         </div>
-                        <BoardroomItem />
+                        <BoardroomsContainer params={searchParams} />
                     </div>
                     <div className="bg-teal-500 h-full w-full p-10 hidden lg:block"></div>
                 </div>

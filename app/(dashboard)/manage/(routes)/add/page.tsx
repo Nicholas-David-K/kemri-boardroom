@@ -8,7 +8,7 @@ const AddBoardroomPage = (props: Props) => {
     return (
         <div>
             <Header
-                heading="New boardroom"
+                heading="Add boardroom"
                 subtitle="Provide the details to add a new boardroom to the system."
             />
             <WidthWrapper>
