@@ -1,6 +1,6 @@
 'use client';
 
-import { Amenities, Locations } from '@prisma/client';
+import { Amenities, Boardroom, Image as ImageType, Locations } from '@prisma/client';
 import { CheckCheck, Loader2 } from 'lucide-react';
 import {
     Form,
@@ -18,63 +18,81 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { useState, useTransition } from 'react';
 
 import { BoardroomSchema } from '@/schemas';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import ImageUpload from '@/components/image-upload';
 import { Input } from '@/components/input';
-import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/textarea';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+interface BoardroomFormProps {
+    initialData?:
+        | (Boardroom & {
+              images: ImageType[];
+          })
+        | null;
+}
 
 type BoardroomFormValues = z.infer<typeof BoardroomSchema>;
 
 const amenities = Object.keys(Amenities)
-    .filter((value) => isNaN(Number(value))) // Filter out numeric keys from the enum
+    .filter((value) => isNaN(Number(value)))
     .map((value) => ({
         id: value.toLowerCase(),
         label: value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
     }));
 
-//
-
-const BoardroomForm = () => {
+const BoardroomForm = ({ initialData }: BoardroomFormProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
+    const toastMessage = initialData ? 'Boardroom updated' : 'Boardroom created';
+    const action = initialData ? 'Save changes' : 'Create boardroom';
+
     const form = useForm<BoardroomFormValues>({
         resolver: zodResolver(BoardroomSchema),
-        defaultValues: {
-            name: '',
-            description: '',
-            location: '',
-            capacity: undefined,
-            images: [],
-            amenities: [],
-            availability: [],
-        },
+        defaultValues: initialData
+            ? {
+                  ...initialData,
+                  amenities: initialData.amenities.map((amenity) => amenity.toLowerCase()),
+                  images: initialData.images.map((image) => ({ url: image.url })),
+              }
+            : {
+                  name: '',
+                  description: '',
+                  location: '',
+                  capacity: undefined,
+                  images: [],
+                  amenities: [],
+              },
     });
 
-    const onSubmit = async (values: BoardroomFormValues) => {
-        try {
-            setIsLoading(true);
-            await axios.post('/api/add-boardroom', values);
-            toast.success('Boardroom created!');
-            router.refresh();
+    const { isValid, isSubmitting } = form.formState;
 
-            setTimeout(() => {
-                router.push('/manage');
-            }, 1000);
+    const onSubmit = async (values: BoardroomFormValues) => {
+        console.log(values);
+        setIsLoading(true);
+        try {
+            if (initialData) {
+                console.log(values);
+                await axios.patch(`/api/boardrooms/${initialData.id}`, values);
+            } else {
+                await axios.post('/api/boardrooms/add-boardroom', values);
+            }
+            router.refresh();
+            toast.success(toastMessage);
+            router.push('/manage');
+            router.refresh();
         } catch (error) {
-            toast.error('Something went wrong!');
+            toast.error('Something went wrong');
         } finally {
             setIsLoading(false);
         }
@@ -249,49 +267,47 @@ const BoardroomForm = () => {
                         </div>
 
                         <div>
-                            <div>
-                                <FormField
-                                    control={form.control}
-                                    name="images"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Images</FormLabel>
-                                            <FormDescription>
-                                                Upload a maximum of 3 images
-                                            </FormDescription>
-                                            <FormControl>
-                                                <ImageUpload
-                                                    value={field.value.map((image) => image.url)}
-                                                    disabled={isLoading}
-                                                    onChange={(url) =>
-                                                        field.onChange([...field.value, { url }])
-                                                    }
-                                                    onRemove={(url) =>
-                                                        field.onChange([
-                                                            ...field.value.filter(
-                                                                (current) => current.url !== url
-                                                            ),
-                                                        ])
-                                                    }
-                                                />
-                                            </FormControl>
+                            <FormField
+                                control={form.control}
+                                name="images"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Images</FormLabel>
+                                        <FormDescription>
+                                            Upload a maximum of 3 images
+                                        </FormDescription>
+                                        <FormControl>
+                                            <ImageUpload
+                                                value={field.value.map((image) => image.url)}
+                                                disabled={isLoading}
+                                                onChange={(url) =>
+                                                    field.onChange([...field.value, { url }])
+                                                }
+                                                onRemove={(url) =>
+                                                    field.onChange([
+                                                        ...field.value.filter(
+                                                            (current) => current.url !== url
+                                                        ),
+                                                    ])
+                                                }
+                                            />
+                                        </FormControl>
 
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                     </div>
 
                     <Button
                         size="lg"
-                        disabled={isLoading}
+                        disabled={isLoading || isSubmitting || !isValid}
                         className="ml-auto rounded-sm mt-10"
                         type="submit"
                     >
                         {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                        {!isLoading && <CheckCheck className="h-4 w-4 mr-2" />}Create boardroom
+                        {!isLoading && <CheckCheck className="h-4 w-4 mr-2" />} {action}
                     </Button>
                 </form>
             </Form>

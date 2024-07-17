@@ -9,11 +9,11 @@ import WidthWrapper from '@/components/width-wrapper';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-interface DasshboardPageProps {
+interface DashboardPageProps {
     searchParams: Filters;
 }
 
-const DasshboardPage = ({ searchParams }: DasshboardPageProps) => {
+const DasshboardPage = ({ searchParams }: DashboardPageProps) => {
     return (
         <main>
             <WelcomeHeader />

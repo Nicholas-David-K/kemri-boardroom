@@ -16,7 +16,7 @@ interface BoardroomsContainerProps {
 const BoardroomsContainer = ({ params }: BoardroomsContainerProps) => {
     const { data, status } = useBoardroomsQuery({
         queryKey: 'fetch-boardrooms',
-        apiUrl: '/api/fetch-boardrooms',
+        apiUrl: '/api/boardrooms',
         filters: params,
     });
 
@@ -36,7 +36,7 @@ const BoardroomsContainer = ({ params }: BoardroomsContainerProps) => {
 
     return (
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4">
-            {data.map((boardroom: any) => (
+            {data?.map((boardroom: any) => (
                 <div key={boardroom.id}>
                     <BoardroomItem data={boardroom} />
                 </div>

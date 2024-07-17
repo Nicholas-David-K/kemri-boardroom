@@ -32,7 +32,7 @@ const DashboardSidebar = () => {
     ];
 
     return (
-        <div className="mx-2 my-3 rounded-lg space-y-4 flex flex-col items-center h-full w-full py-3 bg-gradient-to-b from-primary-400 to-[#546FC2]">
+        <div className="space-y-4 flex flex-col items-center h-full w-full py-3 bg-gradient-to-b from-[#4b456e] to-[#4b456e]">
             <Logo />
             <NavigationAction />
 

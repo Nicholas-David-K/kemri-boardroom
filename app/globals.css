@@ -142,3 +142,10 @@ body,
     width: 217px;
     min-height: 400px;
   }
+
+
+
+
+#reactSchedulerOutsideWrapper {
+  position: relative !important
+}

@@ -19,5 +19,4 @@ export const BoardroomSchema = z.object({
         message: 'Upload at least one image',
     }),
     capacity: z.coerce.number().min(1),
-    availability: z.string().array().max(10),
 });
