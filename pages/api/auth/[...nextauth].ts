@@ -96,7 +96,7 @@ export const authOptions: AuthOptions = {
                         };
 
                         const res: any = await client.search('DC=kemri,DC=org', options);
-                        // console.log(res);
+                        console.log(res);
 
                         const user = await getUserByEmail(res[0]['userPrincipalName']);
 
