@@ -1,17 +1,22 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import BookModal from "@/components/modals/book-modal";
+import { useEffect, useState } from "react";
 
 export const ModalProvider = () => {
-    const [isMounted, setIsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-    if (!isMounted) {
-        return null;
-    }
+  if (!isMounted) {
+    return null;
+  }
 
-    return <></>;
+  return (
+    <>
+      <BookModal />
+    </>
+  );
 };

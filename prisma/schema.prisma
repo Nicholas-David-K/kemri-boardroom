@@ -21,6 +21,16 @@ enum Role {
   admin
 }
 
+enum MeetingType {
+  hybrid
+  physical
+}
+
+enum MediumType {
+  teams
+  zoom
+}
+
 enum Amenities {
   Whiteboard
   Projection
@@ -52,8 +62,24 @@ model Boardroom {
   images      Image[]
   active      Boolean     @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reservations Reservation[]
+}
+
+model Reservation {
+  id          String      @id @default(nanoid(10)) @map("_id")
+  name        String
+  date        DateTime
+  duration    String
+  type        MeetingType @default(physical)
+  meetingLink String?
+  medium      MediumType?
+  boardroom   Boardroom   @relation(fields: [boardroomId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  boardroomId String
 }
 
 model Image {

@@ -1,3 +1,4 @@
+import { type } from 'os';
 import * as z from 'zod';
 
 export const LoginSchema = z.object({
@@ -19,4 +20,15 @@ export const BoardroomSchema = z.object({
         message: 'Upload at least one image',
     }),
     capacity: z.coerce.number().min(1),
+});
+
+export const ReservationSchema = z.object({
+    name: z.string().min(1),
+    date: z.date({
+        required_error: "No meeting date provided"
+    }),
+    duration: z.string().min(1),
+    type: z.string().min(1),
+    medium: z.string().min(1),
+    
 });
