@@ -21,22 +21,7 @@ export default function Home({ searchParams }: HomepageProps) {
             <WidthWrapper>
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                     <div className="md:col-span-4 col-span-4 w-full">
-                        <div className="flex items-center justify-between">
-                            <Link
-                                href="/manage/add"
-                                className={cn(
-                                    'group',
-                                    buttonVariants({
-                                        variant: 'primary',
-                                    })
-                                )}
-                            >
-                                <PlusCircle
-                                    size="lg"
-                                    className="h-5 w-5 mr-2 text-white group-hover:scale-110 transition "
-                                />{' '}
-                                Add boardroom
-                            </Link>
+                        <div className="flex items-center justify-end">
                             <FilterModal />
                         </div>
                         <BoardroomsContainer params={searchParams} />

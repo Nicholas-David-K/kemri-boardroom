@@ -26,7 +26,7 @@ enum MeetingType {
   physical
 }
 
-enum MediumType {
+enum Platform {
   teams
   zoom
 }
@@ -74,7 +74,7 @@ model Reservation {
   duration    String
   type        MeetingType @default(physical)
   meetingLink String?
-  medium      MediumType?
+  platform    Platform?
   boardroom   Boardroom   @relation(fields: [boardroomId], references: [id])
 
   createdAt   DateTime @default(now())
