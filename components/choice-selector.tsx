@@ -5,7 +5,7 @@ import { LucideIcon } from 'lucide-react';
 
 interface ChoiceSelectorProps {
     selected?: boolean;
-    icon: IconType | LucideIcon;
+    icon?: IconType | LucideIcon;
     label: string;
     onClick: (value: string) => void;
 }
@@ -19,7 +19,7 @@ const ChoiceSelector = ({ onClick, selected, icon: Icon, label }: ChoiceSelector
             }`}
         >
             <div className="flex flex-row items-center gap-x-10">
-                <Icon size={20} />
+                {Icon && <Icon size={20} />}
                 <div className="font-semibold">{label}</div>
             </div>
         </div>

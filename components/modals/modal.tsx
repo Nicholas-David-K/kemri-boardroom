@@ -19,6 +19,7 @@ type ModalProps = {
     onClose: () => void;
     onSubmit?: () => void;
     title?: string;
+    error?: string;
     body?: React.ReactElement;
     footer?: React.ReactElement;
     description?: string;
@@ -41,6 +42,7 @@ const Modal = ({
     body,
     footer,
     disabled,
+    error,
     description,
     actionLabel,
     secondaryAction,
@@ -87,11 +89,14 @@ const Modal = ({
         <Dialog open={isOpen} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle className="font-bold text-2xl">{title}</DialogTitle>
+                    <DialogTitle className="font-bold text-3xl">{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
                 <Separator />
 
+                {error && (
+                    <div className="p-3 rounded-sm text-sm bg-rose-500 text-white">{error}</div>
+                )}
                 <div className="grid gap-4 py-4">{body}</div>
 
                 <DialogFooter className="w-full">
