@@ -92,7 +92,11 @@ const BoardroomInfo = ({ data }: BoardroomInfoProps) => {
                     </div>
 
                     <div className="mt-5 group">
-                        <Button onClick={reserveModal.onOpen} size="lg" variant="primary">
+                        <Button
+                            onClick={() => reserveModal.onOpen(data || undefined)}
+                            size="lg"
+                            variant="primary"
+                        >
                             Book Boardroom
                             <Plus className="h-5 w-5 text-white group-hover:scale-125 transition ml-2" />
                         </Button>

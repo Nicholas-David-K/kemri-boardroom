@@ -1,14 +1,17 @@
+import { Boardroom } from '@prisma/client';
 import { create } from 'zustand';
 
 interface CreateBookModalProps {
     isOpen: boolean;
-    onOpen: () => void;
+    data?: Boardroom;
+    onOpen: (data?: Boardroom) => void;
     onClose: () => void;
 }
 
 const useReserveModal = create<CreateBookModalProps>((set) => ({
     isOpen: false,
-    onOpen: () => set({ isOpen: true }),
+    data: undefined,
+    onOpen: (data?: Boardroom) => set({ isOpen: true, data }),
     onClose: () => set({ isOpen: false }),
 }));
 

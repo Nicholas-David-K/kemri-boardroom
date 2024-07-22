@@ -1,6 +1,7 @@
 'use client';
 
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import axios, { AxiosError } from 'axios';
 import { durations, meetingLinks, meetingTypes, platformTypes } from '@/lib/utils';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -40,7 +41,7 @@ const ReserveModal = () => {
         defaultValues: {
             name: '',
             date: new Date(),
-            meetingDuration: '30 minutes',
+            meetingDuration: 30,
             meetingType: 'Hybrid',
             platformType: 'Teams',
             meetingLink: 'Yes',
@@ -70,7 +71,7 @@ const ReserveModal = () => {
         });
     };
 
-    const onSubmit: SubmitHandler<FieldValues> = (values) => {
+    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
         setError('');
 
         if (step !== STEPS.MEETING_INFO) {
@@ -78,14 +79,27 @@ const ReserveModal = () => {
         }
 
         try {
+            setIsLoading(true);
+
             if ((meetingType === 'Physical' || meetingType === 'Hybrid') && !date) {
                 setError('Please provide the date and time of the meeting');
                 return;
             }
 
-            console.log(values);
-        } catch (error) {
-            setError('Something went wrong! Please try again');
+            await axios.post('/api/boardrooms/reserve', {
+                ...values,
+                boardroomId: reserveModal.data?.id,
+            });
+
+            //
+        } catch (error: any) {
+            if (error?.response?.status === 409) {
+                setError(
+                    'The selected time overlaps with an existing reservation. Please choose a different time slot.'
+                );
+            } else {
+                setError('Something went wrong! Please try again');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -194,10 +208,6 @@ const ReserveModal = () => {
                                 />
                             </div>
                         </div>
-
-                        <small className="text-xs text-slate-900">
-                            Provide details for your meeting.
-                        </small>
                     </>
                 )}
 
@@ -214,9 +224,6 @@ const ReserveModal = () => {
                                 required
                             />
                         </div>
-                        <small className="text-xs text-slate-900">
-                            Provide a name for your meeting.
-                        </small>
                     </>
                 )}
             </div>
@@ -255,8 +262,8 @@ const ReserveModal = () => {
                         {durations.map((item) => (
                             <div key={item.label} className="col-span-1">
                                 <ChoiceSelector
-                                    onClick={(type) => setCustomValue('meetingDuration', type)}
-                                    selected={meetingDuration === item.label}
+                                    onClick={() => setCustomValue('meetingDuration', item.minutes)}
+                                    selected={meetingDuration === item.minutes}
                                     label={item.label}
                                 />
                             </div>
@@ -272,9 +279,10 @@ const ReserveModal = () => {
             isOpen={reserveModal.isOpen}
             onClose={reserveModal.onClose}
             onSubmit={handleSubmit(onSubmit)}
-            title="Reserve boardroom"
-            description="Follow the steps to reserve your boardroom"
+            title={`Reserve ${reserveModal.data?.name}`}
+            description="Follow the steps to make a reservation"
             disabled={isLoading}
+            isLoading={isLoading}
             actionLabel={actionLabel}
             secondaryActionLabel={secondaryActionLabel}
             secondaryAction={step === STEPS.MEETING_TYPE ? undefined : onBack}
