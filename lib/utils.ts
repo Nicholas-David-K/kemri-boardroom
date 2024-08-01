@@ -1,5 +1,6 @@
 import { Amenities } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
+import { addMinutes, format, parseISO } from 'date-fns';
 import { Wifi } from 'lucide-react';
 import { BiLogoZoom } from 'react-icons/bi';
 import { BsMicrosoftTeams } from 'react-icons/bs';
@@ -23,6 +24,17 @@ export function getGreeting() {
     } else {
         return 'Good evening';
     }
+}
+
+export function getFormattedMeetingTime(meetingDateUTC: string, durationMinutes: number) {
+    const meetingDateLocal = new Date(meetingDateUTC);
+
+    const endDate = addMinutes(meetingDateLocal, durationMinutes);
+
+    const formattedStartTime = format(meetingDateLocal, 'h:mm a');
+    const formattedEndTime = format(endDate, 'h:mm a');
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
 }
 
 export const meetingTypes = [

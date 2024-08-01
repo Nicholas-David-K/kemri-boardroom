@@ -412,7 +412,7 @@ const TimePickerInput = React.forwardRef<HTMLInputElement, TimePickerInputProps>
             value,
             id,
             name,
-            date = new Date(new Date().setHours(0, 0, 0, 0)),
+            date = new Date(new Date().setHours(10, 30, 0, 0)),
             onDateChange,
             onChange,
             onKeyDown,
@@ -610,6 +610,7 @@ const TimePicker = React.forwardRef<TimePickerRef, TimePickerProps>(
         );
     }
 );
+
 TimePicker.displayName = 'TimePicker';
 
 type Granularity = 'day' | 'hour' | 'minute' | 'second';

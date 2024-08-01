@@ -1,13 +1,7 @@
-import Calendar from '@/components/calendar';
-
 type Props = {};
 
 const CalendarPage = (props: Props) => {
-    return (
-        <div>
-            <Calendar />
-        </div>
-    );
+    return <div>Calendar</div>;
 };
 
 export default CalendarPage;

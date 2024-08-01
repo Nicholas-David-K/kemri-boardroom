@@ -2,22 +2,39 @@
 
 import { Boardroom, Image as ImageType } from '@prisma/client';
 import {
+    CalendarClock,
+    CirclePlus,
+    CircleX,
+    Clock,
     EllipsisVertical,
-    LucideIcon,
+    HistoryIcon,
+    Link,
     MicVocal,
     Monitor,
-    Pencil,
-    Plus,
-    SquarePen,
+    User2Icon,
+    Users,
     WifiIcon,
 } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { FaBlenderPhone, FaChalkboardTeacher } from 'react-icons/fa';
 
 import { Amenities } from '@prisma/client';
-import { Button } from './ui/button';
-import { IconType } from 'react-icons/lib';
+import AmenityItem from './aminity-item';
+import { BsPeople } from 'react-icons/bs';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import useReserveModal from '@/hooks/use-reserve-modal';
+import { ReservationFilters } from '@/types';
+import ReservationsContainer from './reservations-container';
+import SearchInput from './navigation/search-input';
+import { cn } from '@/lib/utils';
+import useReserveModal from '@/hooks/reservations/use-reserve-modal';
 
 interface BoardroomInfoProps {
     data:
@@ -25,9 +42,10 @@ interface BoardroomInfoProps {
               images: ImageType[];
           })
         | null;
+    params: ReservationFilters;
 }
 
-const BoardroomInfo = ({ data }: BoardroomInfoProps) => {
+const BoardroomInfo = ({ data, params }: BoardroomInfoProps) => {
     const reserveModal = useReserveModal();
 
     const amenitiesIcons = {
@@ -38,171 +56,126 @@ const BoardroomInfo = ({ data }: BoardroomInfoProps) => {
         [Amenities.Telephone]: FaBlenderPhone,
     };
 
-    const Amenity = ({ amenity, Icon }: { amenity: string; Icon: IconType | LucideIcon }) => (
-        <div className="border rounded-xl p-5">
-            <div className="border w-10 h-10 flex flex-col items-center justify-center rounded-xl p-2">
-                <Icon className="text-gray-500 h-4 w-4" />
-            </div>
-
-            <p className="text-sm text-slate-500 mt-5">{amenity}</p>
-        </div>
-    );
-
     return (
-        <div>
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {data?.images.map((image) => (
-                    <div key={image.id} className="relative rounded-lg h-56 w-full">
+        <div className="grid grid-cols-7 gap-8">
+            <div className="col-span-7 xl:col-span-5">
+                <div className="bg-white-bg p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                    <div>
+                        <div className="pb-2">
+                            <p className="text-2xl font-bold">{data?.name}</p>
+                            <p className="text-sm">
+                                KEMRI{' '}
+                                {data?.location === 'Nairobi'
+                                    ? `Headquarters, ${data?.location}`
+                                    : data?.location}
+                            </p>
+                        </div>
+
+                        <p className="text-sm text-slate-500 mt-5">{data?.description}</p>
+
+                        <div className="mt-10">
+                            <h3 className="uppercase font-bold text-sm mb-2.5">Amenities</h3>
+                            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mt-2">
+                                <>
+                                    {Object.values(Amenities)
+                                        .filter((amenity) => data?.amenities.includes(amenity))
+                                        .map((amenity, index) => {
+                                            const IconComponent = amenitiesIcons[amenity];
+                                            return (
+                                                <AmenityItem
+                                                    key={index}
+                                                    amenity={amenity}
+                                                    icon={IconComponent}
+                                                />
+                                            );
+                                        })}
+                                </>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="relative w-full hidden md:block">
                         <Image
                             className="rounded-lg"
-                            src={`${image.url}`}
+                            src={`${data?.images[0].url}`}
                             alt="boardroom-img"
                             fill
                             objectFit="cover"
                         />
                     </div>
-                ))}
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                <div className="flex flex-col space-y-10">
-                    <div>
-                        <h3 className="uppercase font-bold text-sm mb-2.5">Description</h3>
-                        <p className="text-sm text-slate-500">{data?.description}</p>
-                    </div>
-
-                    <div>
-                        <h3 className="uppercase font-bold text-sm mb-2.5">Amenities</h3>
-                        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-3 mt-2">
-                            <>
-                                {Object.values(Amenities)
-                                    .filter((amenity) => data?.amenities.includes(amenity))
-                                    .map((amenity, index) => {
-                                        const IconComponent = amenitiesIcons[amenity];
-                                        return (
-                                            <Amenity
-                                                key={index}
-                                                amenity={amenity}
-                                                Icon={IconComponent}
-                                            />
-                                        );
-                                    })}
-                            </>
-                        </div>
-                    </div>
-
-                    <div className="mt-5 group">
-                        <Button
-                            onClick={() => reserveModal.onOpen(data || undefined)}
-                            size="lg"
-                            variant="primary"
-                        >
-                            Book Boardroom
-                            <Plus className="h-5 w-5 text-white group-hover:scale-125 transition ml-2" />
-                        </Button>
+                    <div
+                        className="absolute top-10 right-10 z-10 bg-primary-500 w-40 text-white font-semibold flex items-center py-1.5 text-sm
+                     justify-center rounded-lg"
+                    >
+                        <Users className="mr-2 h-5 w-5" />
+                        Fits {data?.capacity} people
                     </div>
                 </div>
 
-                <div>
-                    <h3 className="uppercase font-bold text-sm mb-2.5">My Bookings</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="border rounded-sm p-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="font-bold text-sm">Design Sprint Meeting</h3>
-                                    <p className="text-sm text-slate-500">
-                                        July 18, 2024 | 10:00 AM - 2:30 PM
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <Button variant="ghost" size="sm">
-                                        <SquarePen className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm">
-                                        <EllipsisVertical className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="text-sm mt-5">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis
-                                quo,
-                            </div>
+                <div className="mt-3 p-3 rounded-lg bg-[#f4f4f5] sticky">
+                    <div className="flex items-center justify-between">
+                        <div className="grid grid-cols-4 gap-2 w-full md:w-[500px]">
+                            <button
+                                onClick={() => {}}
+                                className={cn(
+                                    'py-3 px-2 bg-white flex flex-row items-center justify-center gap-3 rounded-lg cursor-pointer transition text-sm font-semibold'
+                                )}
+                            >
+                                <CalendarClock
+                                    className={cn('text-slate-500 h-4 w-4 hidden md:block')}
+                                />
+                                <div>Upcoming</div>
+                            </button>
+                            <button
+                                onClick={() => {}}
+                                className={cn(
+                                    'py-3 px-2 flex bg-white flex-row items-center justify-center gap-3 rounded-lg cursor-pointer transition text-sm font-semibold'
+                                )}
+                            >
+                                <Clock className={cn('text-slate-500 h-4 w-4 hidden md:block')} />
+                                <div>Pending</div>
+                            </button>
+                            <button
+                                onClick={() => {}}
+                                className={cn(
+                                    'py-3 px-2 flex flex-row items-center justify-center gap-3 rounded-lg cursor-pointer transition text-sm font-semibold'
+                                )}
+                            >
+                                <HistoryIcon
+                                    className={cn('text-slate-500 h-4 w-4 hidden md:block')}
+                                />
+                                <div>Past</div>
+                            </button>
+                            <button
+                                onClick={() => {}}
+                                className={cn(
+                                    'py-3 px-2 flex flex-row items-center justify-center gap-3 rounded-lg cursor-pointer transition text-sm font-semibold'
+                                )}
+                            >
+                                <CircleX className={cn('text-slate-500 h-4 w-4 hidden md:block')} />
+                                <div>Cancelled</div>
+                            </button>
                         </div>
 
-                        <div className="border rounded-sm p-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="font-bold text-sm">Design Sprint Meeting</h3>
-                                    <p className="text-sm text-slate-500">
-                                        July 18, 2024 | 10:00 AM - 2:30 PM
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <Button variant="ghost" size="sm">
-                                        <SquarePen className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm">
-                                        <EllipsisVertical className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="text-sm mt-5">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis
-                                quo,
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 className="uppercase font-bold text-sm mb-2.5 mt-10">Upcoming Bookings</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="border rounded-sm p-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="font-bold text-sm">Design Sprint Meeting</h3>
-                                    <p className="text-sm text-slate-500">
-                                        July 18, 2024 | 10:00 AM - 2:30 PM
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <Button variant="ghost" size="sm">
-                                        <SquarePen className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm">
-                                        <EllipsisVertical className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="text-sm mt-5">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis
-                                quo,
-                            </div>
-                        </div>
-
-                        <div className="border rounded-sm p-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="font-bold text-sm">Design Sprint Meeting</h3>
-                                    <p className="text-sm text-slate-500">
-                                        July 18, 2024 | 10:00 AM - 2:30 PM
-                                    </p>
-                                </div>
-                                <div className="flex items-center">
-                                    <Button variant="ghost" size="sm">
-                                        <SquarePen className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm">
-                                        <EllipsisVertical className="h-4 w-4 text-gray-500" />
-                                    </Button>
-                                </div>
-                            </div>
-                            <div className="text-sm mt-5">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis
-                                quo,
-                            </div>
+                        <div className="flex items-center space-x-2">
+                            <SearchInput className="w-80 hidden lg:block" />
+                            <Button
+                                onClick={() => reserveModal.onOpen(data || undefined)}
+                                variant="primary"
+                                size="lg"
+                                className="capitalize hidden md:flex items-center space-x-2"
+                            >
+                                Book {data?.name}{' '}
+                                <CirclePlus className="h-5 w-5 ml-5 hidden md:block" />
+                            </Button>
                         </div>
                     </div>
                 </div>
+
+                <ReservationsContainer boardroomId={data?.id} />
             </div>
+            <div className="hidden xl:block xl:col-span-2 bg-red-500"></div>
         </div>
     );
 };

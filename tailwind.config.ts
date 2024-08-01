@@ -41,22 +41,16 @@ const config = {
             colors: {
                 'white-bg': '#f7f8f9',
                 'primary-500': '#06abdd',
-                'primary-400': '#1e73be',
-                'dark-500': '#262626',
+                'primary-400': '#3d61fe',
+                'dark-500': '#191b3f',
+                icon: '#787993',
+                gray: '#dededf',
 
                 border: 'hsl(var(--border))',
                 input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
-                primary: {
-                    DEFAULT: 'hsl(var(--primary))',
-                    foreground: 'hsl(var(--primary-foreground))',
-                },
-                secondary: {
-                    DEFAULT: 'hsl(var(--secondary))',
-                    foreground: 'hsl(var(--secondary-foreground))',
-                },
                 destructive: {
                     DEFAULT: 'hsl(var(--destructive))',
                     foreground: 'hsl(var(--destructive-foreground))',

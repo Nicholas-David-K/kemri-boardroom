@@ -1,17 +1,17 @@
 'use client';
 
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import axios, { AxiosError } from 'axios';
+import { Video, VideoOff } from 'lucide-react';
 import { durations, meetingLinks, meetingTypes, platformTypes } from '@/lib/utils';
 import { useEffect, useMemo, useState } from 'react';
 
 import ChoiceSelector from '@/components/choice-selector';
 import { DateTimePicker } from '../date-time-picker';
-import { FaPeopleRoof } from 'react-icons/fa6';
 import Heading from '@/components/heading';
 import Input from '@/components/inputs/input';
 import Modal from '@/components/modals/modal';
-import useReserveModal from '@/hooks/use-reserve-modal';
+import axios from 'axios';
+import useReserveModal from '@/hooks/reservations/use-reserve-modal';
 import { useRouter } from 'next/navigation';
 
 enum STEPS {
@@ -198,13 +198,13 @@ const ReserveModal = () => {
                                     onClick={() => setCustomValue('recordMeeting', 'Yes')}
                                     selected={recordMeeting === 'Yes'}
                                     label="Yes"
-                                    icon={FaPeopleRoof}
+                                    icon={Video}
                                 />
                                 <ChoiceSelector
                                     onClick={() => setCustomValue('recordMeeting', 'No')}
                                     selected={recordMeeting === 'No'}
                                     label="No"
-                                    icon={FaPeopleRoof}
+                                    icon={VideoOff}
                                 />
                             </div>
                         </div>
@@ -250,10 +250,7 @@ const ReserveModal = () => {
                     </>
                 )}
 
-                <Heading
-                    title="Select the date and meeting time"
-                    subtitle="Select date and time for your meeting"
-                />
+                <Heading title="Select the date and meeting time" />
                 <DateTimePicker hourCycle={12} value={date} onChange={setDate} />
 
                 <div className="mt-3">

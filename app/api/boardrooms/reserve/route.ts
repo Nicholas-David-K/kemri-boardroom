@@ -8,6 +8,7 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         console.log(body);
+        console.log(currentUser);
 
         const {
             name,
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
             boardroomId,
         } = body;
 
+        console.log(meetingDuration as string);
         if (!currentUser) {
             return new NextResponse('Unauthorized', { status: 401 });
         }
@@ -81,7 +83,34 @@ export async function POST(req: Request) {
             }
         }
 
-        return NextResponse.json('success');
+        let reservation;
+        if (meetingType === 'Hybrid') {
+            reservation = await db.reservation.create({
+                data: {
+                    name,
+                    date,
+                    duration: meetingDuration,
+                    type: meetingType,
+                    meetingLink,
+                    platform: platformType,
+                    userId: currentUser.id,
+                    boardroomId,
+                },
+            });
+        } else {
+            reservation = await db.reservation.create({
+                data: {
+                    name,
+                    date,
+                    duration: meetingDuration,
+                    type: meetingType,
+                    userId: currentUser.id,
+                    boardroomId,
+                },
+            });
+        }
+
+        return NextResponse.json(reservation);
     } catch (error) {
         console.log(['BOARDROOM_RESERVE_ERROR'], error);
         return new NextResponse('Internal error', { status: 500 });

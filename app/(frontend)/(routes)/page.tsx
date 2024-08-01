@@ -16,7 +16,7 @@ interface HomepageProps {
 
 export default function Home({ searchParams }: HomepageProps) {
     return (
-        <main>
+        <div>
             <WelcomeHeader />
             <WidthWrapper>
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -29,6 +29,6 @@ export default function Home({ searchParams }: HomepageProps) {
                     <div className="bg-primary-500 h-full w-full p-10 hidden lg:block"></div>
                 </div>
             </WidthWrapper>
-        </main>
+        </div>
     );
 }

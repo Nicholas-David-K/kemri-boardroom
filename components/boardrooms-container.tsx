@@ -7,7 +7,7 @@ import BoardroomItem from './boardroom-item';
 import { Filters } from '@/types';
 import NoResults from './no-results';
 import { SkeletonCard } from './skeleton';
-import { useBoardroomsQuery } from '@/hooks/auth/query-hooks/use-boardrooms-query';
+import { useBoardroomsQuery } from '@/hooks/boardrooms/use-boardrooms-query';
 
 interface BoardroomsContainerProps {
     params: Filters;
@@ -20,7 +20,7 @@ const BoardroomsContainer = ({ params }: BoardroomsContainerProps) => {
         filters: params,
     });
 
-    if (status === 'pending') {
+    if (status === 'loading') {
         return (
             <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4">
                 {Array.from({ length: 10 }, (_, index) => (

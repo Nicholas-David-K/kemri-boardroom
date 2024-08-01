@@ -11,12 +11,13 @@ type Props = {
 const FrontendLayout = async ({ children }: Props) => {
     const currentUser = await getServerSession();
     const greeting = getGreeting();
+
     return (
-        <div className="h-full">
+        <div>
             <div className="hidden md:flex h-full w-[110px] z-30 flex-col fixed inset-y-0">
                 <NavigationSidebar />
             </div>
-            <main className="md:pl-[110px] h-full">{children}</main>
+            <main className="md:pl-[110px]">{children}</main>
         </div>
     );
 };
