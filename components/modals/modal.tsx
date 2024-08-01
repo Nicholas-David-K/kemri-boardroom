@@ -116,10 +116,12 @@ const Modal = ({
                                     variant={isDelete ? 'destructive' : 'primary'}
                                     type="submit"
                                     disabled={disabled}
-                                    className="w-full rounded-sm"
+                                    className="w-full"
                                     onClick={handleSubmit}
                                 >
-                                    {isLoading && <Loader2 className="h-5 w-5 animate-spin mr-2" />}
+                                    {isLoading && (
+                                        <Loader2 className="h-5 w-5 py-5 animate-spin mr-2" />
+                                    )}
                                     {actionLabel}
                                 </Button>
                             )}

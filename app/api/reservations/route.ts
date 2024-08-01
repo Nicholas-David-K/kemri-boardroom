@@ -4,14 +4,16 @@ import { db } from '@/lib/db';
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
-        const boardroomId = searchParams.get('boardroomId');
+        const boardroomId = searchParams.get('boardroomId') || null;
 
-        console.log('[BOARDROOM_ID]: ', boardroomId);
+        const query: any = {};
+
+        if (boardroomId !== null) {
+            query.boardroomId = boardroomId;
+        }
 
         const reservations = await db.reservation.findMany({
-            where: {
-                boardroomId: 'KN6FZg0eMP',
-            },
+            where: query,
             include: {
                 boardroom: true,
             },

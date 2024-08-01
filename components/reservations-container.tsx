@@ -39,15 +39,19 @@ const ReservationsContainer = ({ boardroomId }: ReservationsContainerProps) => {
         );
     }
 
-    const formattedReservations: ReservationColumn[] = (data ?? []).map((item: Reservation) => ({
-        id: item.id,
-        name: item.name,
-        date: item.date,
-        type: item.type,
-        duration: item.duration,
-        platform: item.platform,
-        createdAt: format(item.createdAt, 'MMMM do, yyyy'),
-    }));
+    const formattedReservations: ReservationColumn[] = (data ?? []).map(
+        (item: ReservationColumn) => ({
+            id: item.id,
+            name: item.name,
+            date: item.date,
+            type: item.type,
+            status: item.status,
+            duration: item.duration,
+            platform: item.platform,
+            createdAt: format(item.createdAt, 'MMMM do, yyyy'),
+            boardroom: item.boardroom,
+        })
+    );
 
     return (
         <div className="flex flex-col">

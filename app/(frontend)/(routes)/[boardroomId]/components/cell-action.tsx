@@ -9,13 +9,12 @@ import {
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useParams, useRouter } from 'next/navigation';
 
+import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import { ReservationColumn } from './columns';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useState } from 'react';
-
-// import { AlertModal } from '@/components/modals/alert-modal';
 
 interface CellActionProps {
     data: ReservationColumn;
@@ -29,7 +28,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success('Capacity id copied to the clipboard');
+        toast.success('Reservation id copied to the clipboard');
     };
 
     const onDelete = async () => {
@@ -37,7 +36,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             setLoading(true);
             await axios.delete(`/api/${params?.storeId}/capacities/${data.id}`);
             router.refresh();
-            toast.success('Capacity deleted.');
+            toast.success('Reservation deleted.');
         } catch (error) {
             toast.error('Make sure you have removed all products using this capacity first.');
         } finally {
@@ -48,13 +47,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
     return (
         <>
-            {/* <AlertModal
+            <AlertModal
                 isOpen={open}
                 onClose={() => setOpen(false)}
                 onConfirm={onDelete}
                 loading={loading}
                 body="You are about to delete a capacity. This will permanently delete your data from our servers."
-            /> */}
+            />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">

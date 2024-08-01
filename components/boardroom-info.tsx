@@ -159,7 +159,6 @@ const BoardroomInfo = ({ data, params }: BoardroomInfoProps) => {
                         </div>
 
                         <div className="flex items-center space-x-2">
-                            <SearchInput className="w-80 hidden lg:block" />
                             <Button
                                 onClick={() => reserveModal.onOpen(data || undefined)}
                                 variant="primary"
@@ -172,7 +171,6 @@ const BoardroomInfo = ({ data, params }: BoardroomInfoProps) => {
                         </div>
                     </div>
                 </div>
-
                 <ReservationsContainer boardroomId={data?.id} />
             </div>
             <div className="hidden xl:block xl:col-span-2 bg-red-500"></div>
