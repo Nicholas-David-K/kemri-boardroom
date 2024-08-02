@@ -34,14 +34,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/${params?.storeId}/capacities/${data.id}`);
-            router.refresh();
+            await axios.delete(`/api/reservations/${data.id}`);
             toast.success('Reservation deleted.');
+            router.refresh();
         } catch (error) {
-            toast.error('Make sure you have removed all products using this capacity first.');
+            toast.error('Something went wrong! Please try again');
         } finally {
             setLoading(false);
             setOpen(false);
+            router.refresh();
         }
     };
 
@@ -52,7 +53,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 onClose={() => setOpen(false)}
                 onConfirm={onDelete}
                 loading={loading}
-                body="You are about to delete a capacity. This will permanently delete your data from our servers."
+                body="You are about to delete a reservation. This action is irreversible and will permanently remove the reservation from the system. Please confirm that you want to proceed."
             />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>

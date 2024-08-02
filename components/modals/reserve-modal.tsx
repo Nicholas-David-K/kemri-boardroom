@@ -13,6 +13,7 @@ import Modal from '@/components/modals/modal';
 import axios from 'axios';
 import useReserveModal from '@/hooks/reservations/use-reserve-modal';
 import { useRouter } from 'next/navigation';
+import useSuccessModal from '@/hooks/reservations/use-success-modal';
 
 enum STEPS {
     MEETING_TYPE = 0,
@@ -27,6 +28,7 @@ const ReserveModal = () => {
 
     const [step, setStep] = useState(STEPS.MEETING_TYPE);
     const reserveModal = useReserveModal();
+    const successModal = useSuccessModal();
 
     const router = useRouter();
 
@@ -91,7 +93,12 @@ const ReserveModal = () => {
                 boardroomId: reserveModal.data?.id,
             });
 
-            //
+            reserveModal.onClose();
+            reset();
+
+            setTimeout(() => {
+                successModal.onOpen();
+            }, 500);
         } catch (error: any) {
             if (error?.response?.status === 409) {
                 setError(

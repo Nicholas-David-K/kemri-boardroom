@@ -28,7 +28,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         return null;
     }
 
-    const bodyContent = <div className="text-center text-muted-foreground text-sm">{body}</div>;
+    const bodyContent = <div className="text-muted-foreground text-sm">{body}</div>;
 
     return (
         <>
@@ -41,7 +41,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
                 disabled={loading}
                 secondaryActionLabel="Cancel"
                 secondaryAction={onClose}
-                actionLabel="Continue"
+                actionLabel="Confirm"
                 onSubmit={onConfirm}
                 isDelete
             />

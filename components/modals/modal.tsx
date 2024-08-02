@@ -119,8 +119,8 @@ const Modal = ({
                                     className="w-full"
                                     onClick={handleSubmit}
                                 >
-                                    {isLoading && (
-                                        <Loader2 className="h-5 w-5 py-5 animate-spin mr-2" />
+                                    {false && (
+                                        <Loader2 className="h-5 w-5 py-5 text-white animate-spin mr-2" />
                                     )}
                                     {actionLabel}
                                 </Button>

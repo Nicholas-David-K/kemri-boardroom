@@ -6,11 +6,18 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const boardroomId = searchParams.get('boardroomId') || null;
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const query: any = {};
 
         if (boardroomId !== null) {
             query.boardroomId = boardroomId;
         }
+
+        // query.date = {
+        //     gte: today,
+        // };
 
         const reservations = await db.reservation.findMany({
             where: query,

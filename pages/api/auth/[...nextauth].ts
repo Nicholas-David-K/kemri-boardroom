@@ -15,8 +15,8 @@ export interface AuthSession {
 
 const createLdapClient = () => {
     return new LdapClient({
-        // url: 'ldap://192.168.100.72',
-        url: 'ldap://10.0.2.53',
+        url: 'ldap://192.168.100.72',
+        // url: 'ldap://10.0.2.53',
         tlsOptions: { rejectUnauthorized: false },
     });
 };

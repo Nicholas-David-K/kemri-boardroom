@@ -40,8 +40,8 @@ const config = {
             },
             colors: {
                 'white-bg': '#f7f8f9',
-                'primary-500': '#06abdd',
-                'primary-400': '#3d61fe',
+                'primary-500': '#2991d6',
+                'primary-400': '#248ae4',
                 'dark-500': '#191b3f',
                 icon: '#787993',
                 gray: '#dededf',
