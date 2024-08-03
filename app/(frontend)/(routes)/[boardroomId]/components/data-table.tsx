@@ -28,7 +28,9 @@ import {
 } from '@/components/ui/table';
 
 import { Button } from '@/components/ui/button';
+import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { Input } from '@/components/ui/input';
+import { reservationStatuses } from '@/lib/utils';
 import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
@@ -64,15 +66,22 @@ export function DataTable<TData, TValue>({
     });
 
     return (
-        <div className="border shadow-sm px-6 rounded-md">
+        <div>
             <div className="flex items-center py-4">
+                <div className="flex items-center space-x-3">
+                    <DataTableFacetedFilter
+                        title="Status"
+                        column={table.getColumn('status')}
+                        options={reservationStatuses}
+                    />
+                </div>
                 <Input
                     placeholder="Search"
                     value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
                     onChange={(event) =>
                         table.getColumn(searchKey)?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm py-5"
+                    className="max-w-sm"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -101,7 +110,7 @@ export function DataTable<TData, TValue>({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md shadow-sm">
+            <div className="rounded-md shadow-sm border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -125,7 +134,6 @@ export function DataTable<TData, TValue>({
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className="h-14 font-medium"
                                     key={row.id}
                                     data-state={row.getIsSelected() && 'selected'}
                                 >

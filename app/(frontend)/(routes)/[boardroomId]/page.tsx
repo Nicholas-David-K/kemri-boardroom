@@ -10,10 +10,9 @@ interface BoardroomDetailPage {
     params: {
         boardroomId: string;
     };
-    searchParams: ReservationFilters;
 }
 
-const BoardroomDetailPage = async ({ params, searchParams }: BoardroomDetailPage) => {
+const BoardroomDetailPage = async ({ params }: BoardroomDetailPage) => {
     const boardroom = await db.boardroom.findUnique({
         where: {
             id: params.boardroomId,
@@ -22,8 +21,9 @@ const BoardroomDetailPage = async ({ params, searchParams }: BoardroomDetailPage
             images: true,
         },
     });
+
     return (
-        <div>
+        <main>
             <Header
                 heading="Reservations"
                 subtitle={`${boardroom?.name} - KEMRI ${
@@ -31,9 +31,9 @@ const BoardroomDetailPage = async ({ params, searchParams }: BoardroomDetailPage
                 }`}
             />
             <WidthWrapper>
-                <BoardroomInfo data={boardroom} params={searchParams} />
+                <BoardroomInfo data={boardroom} />
             </WidthWrapper>
-        </div>
+        </main>
     );
 };
 

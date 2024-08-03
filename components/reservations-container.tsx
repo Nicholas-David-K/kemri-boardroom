@@ -1,15 +1,10 @@
 'use client';
 
-import { ElementRef, Fragment, useMemo, useRef } from 'react';
-import { Link2Icon, Loader } from 'lucide-react';
-import { ReservationFilters, ReservationItem } from '@/types';
-
-import NoResults from './no-results';
-import { Reservation } from '@prisma/client';
+import { Loader } from 'lucide-react';
 import { ReservationColumn } from '@/app/(frontend)/(routes)/[boardroomId]/components/columns';
 import ReservationsClient from '@/app/(frontend)/(routes)/[boardroomId]/components/client';
 import { format } from 'date-fns';
-import { getFormattedMeetingTime } from '@/lib/utils';
+import { useMemo } from 'react';
 import { useReservationsQuery } from '@/hooks/reservations/use-reservations-query';
 
 interface ReservationsContainerProps {
@@ -50,14 +45,15 @@ const ReservationsContainer = ({ boardroomId }: ReservationsContainerProps) => {
             platform: item.platform,
             createdAt: format(item.createdAt, 'MMMM do, yyyy'),
             boardroom: item.boardroom,
+            user: item.user,
         })
     );
 
+    console.log('[FORMATTED_RESERVATIONS]: ', formattedReservations);
+
     return (
-        <div className="flex flex-col">
-            <div className="flex-1 space-y-4 pt-6">
-                <ReservationsClient data={formattedReservations} />
-            </div>
+        <div className="space-y-4 pt-6">
+            <ReservationsClient data={formattedReservations} />
         </div>
     );
 };

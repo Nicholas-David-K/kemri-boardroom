@@ -28,8 +28,10 @@ export default async function RootLayout({
             <body className={nunito.className}>
                 <AuthSessionProvider session={session}>
                     <ToastProvider />
-                    <ModalProvider />
-                    <QueryProvider>{children}</QueryProvider>
+                    <QueryProvider>
+                        <ModalProvider />
+                        {children}
+                    </QueryProvider>
                 </AuthSessionProvider>
             </body>
         </html>

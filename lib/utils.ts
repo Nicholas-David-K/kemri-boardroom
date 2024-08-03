@@ -1,7 +1,7 @@
 import { Amenities } from '@prisma/client';
 import { type ClassValue, clsx } from 'clsx';
 import { addMinutes, format, parseISO } from 'date-fns';
-import { Wifi } from 'lucide-react';
+import { CheckCheck, CircleX, Clock, Wifi } from 'lucide-react';
 import { BiLogoZoom } from 'react-icons/bi';
 import { BsMicrosoftTeams } from 'react-icons/bs';
 import { FaLink, FaUnlink } from 'react-icons/fa';
@@ -98,5 +98,23 @@ export const durations = [
     {
         label: 'Whole day',
         minutes: 1440,
+    },
+];
+
+export const reservationStatuses = [
+    {
+        value: 'pending',
+        label: 'Pending',
+        icon: Clock,
+    },
+    {
+        value: 'cancelled',
+        label: 'Cancelled',
+        icon: CircleX,
+    },
+    {
+        value: 'approved',
+        label: 'Approved',
+        icon: CheckCheck,
     },
 ];

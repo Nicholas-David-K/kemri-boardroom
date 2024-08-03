@@ -1,9 +1,8 @@
 'use client';
 
 import { ReservationColumn, columns } from './columns';
-import { useParams, useRouter } from 'next/navigation';
 
-import { DataTable } from '@/components/ui/data-table';
+import { DataTable } from '@/app/(frontend)/(routes)/[boardroomId]/components/data-table';
 import Heading from '@/components/heading';
 import { Separator } from '@/components/ui/separator';
 

@@ -1,16 +1,19 @@
-import { Filters, ReservationFilters } from '@/types';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-
+import { ReservationFilters } from '@/types';
 import qs from 'query-string';
 import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 interface ProductProps {
     queryKey: string;
-    apiUrl: string;
+    apiUrl?: string;
     filters?: ReservationFilters;
 }
 
-export const useReservationsQuery = ({ queryKey, apiUrl, filters }: ProductProps) => {
+export const useReservationsQuery = ({
+    queryKey,
+    apiUrl = '/api/reservations',
+    filters,
+}: ProductProps) => {
     const fetchReservations = async () => {
         const url = qs.stringifyUrl(
             {

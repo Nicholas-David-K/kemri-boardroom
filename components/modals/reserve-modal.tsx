@@ -11,6 +11,7 @@ import Heading from '@/components/heading';
 import Input from '@/components/inputs/input';
 import Modal from '@/components/modals/modal';
 import axios from 'axios';
+import { useReservationsQuery } from '@/hooks/reservations/use-reservations-query';
 import useReserveModal from '@/hooks/reservations/use-reserve-modal';
 import { useRouter } from 'next/navigation';
 import useSuccessModal from '@/hooks/reservations/use-success-modal';
@@ -31,6 +32,7 @@ const ReserveModal = () => {
     const successModal = useSuccessModal();
 
     const router = useRouter();
+    const { refetch } = useReservationsQuery({ queryKey: 'fetch-reservations' });
 
     const {
         register,
@@ -109,6 +111,7 @@ const ReserveModal = () => {
             }
         } finally {
             setIsLoading(false);
+            refetch();
         }
     };
 

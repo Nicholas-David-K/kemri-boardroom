@@ -1,12 +1,13 @@
 'use client';
 
-import { BellRing, Clock10 } from 'lucide-react';
+import { Platform, User } from '@prisma/client';
 import { format, isToday } from 'date-fns';
 
 import { Badge } from '@/components/ui/badge';
+import { BellRing } from 'lucide-react';
 import { CellAction } from './cell-action';
 import { ColumnDef } from '@tanstack/react-table';
-import { Platform } from '@prisma/client';
+import { FaUserAlt } from 'react-icons/fa';
 import { ReservationItem } from '@/types';
 import { getFormattedMeetingTime } from '@/lib/utils';
 
@@ -19,22 +20,23 @@ export type ReservationColumn = {
     type: string;
     platform: Platform;
     createdAt: string;
+    user: User;
     boardroom: ReservationItem;
 };
 
 export const columns: ColumnDef<ReservationColumn>[] = [
     {
-        accessorKey: 'date',
-        header: 'Meeting date / time',
+        accessorKey: 'user',
         cell: ({ row }) => {
             return (
-                <div className="flex items-center space-x-2 min-w-[270px]">
-                    <span className="font-semibold">
-                        {format(row.getValue('date'), 'MMMM do, yyyy')}
-                    </span>
-                    <Badge variant="gray">
-                        {getFormattedMeetingTime(row.getValue('date'), row.original.duration)}
-                    </Badge>
+                <div className="flex  items-center space-x-2 min-w-[270px]">
+                    <div className="h-10 w-10 flex flex-col items-center justify-center bg-white-bg rounded-full">
+                        <FaUserAlt className="h-4 w-4 text-icon" />
+                    </div>
+                    <div className="flex flex-col">
+                        <p className="font-medium">{row.original.user.name}</p>
+                        <p>{row.original.user.email}</p>
+                    </div>
                 </div>
             );
         },
@@ -45,11 +47,26 @@ export const columns: ColumnDef<ReservationColumn>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex items-center space-x-2 min-w-[250px]">
-                    {isToday(new Date(row.getValue('date'))) && (
-                        <BellRing className="h-4 w-4 mr-1 text-primary-500" />
-                    )}
-
                     <span className="font-semibold">{row.getValue('name')}</span>
+                    {isToday(new Date(row.getValue('date'))) && (
+                        <BellRing className="h-4 w-4 text-primary-500" />
+                    )}
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: 'date',
+        header: 'Meeting time / date',
+        cell: ({ row }) => {
+            return (
+                <div className="flex items-center space-x-2 min-w-[270px]">
+                    <Badge variant="gray">
+                        {getFormattedMeetingTime(row.getValue('date'), row.original.duration)}
+                    </Badge>
+                    <span className="font-semibold">
+                        {format(row.getValue('date'), 'MMMM do, yyyy')}
+                    </span>
                 </div>
             );
         },
@@ -74,7 +91,7 @@ export const columns: ColumnDef<ReservationColumn>[] = [
                 <Badge
                     variant={
                         row.original.status === 'Pending'
-                            ? 'secondary'
+                            ? 'warning'
                             : row.original.status === 'Cancelled'
                             ? 'destructive'
                             : 'default'

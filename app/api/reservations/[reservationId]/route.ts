@@ -6,18 +6,22 @@ export async function DELETE(req: Request, { params }: { params: { reservationId
     try {
         const currentUser = await getCurrentUser();
 
-        console.log('PARAMS ID: ', params.reservationId);
-        console.log('[CURRENT_USER]: ', currentUser);
+        if (!currentUser.id) {
+            return new NextResponse('Unauthorized', { status: 401 });
+        }
 
-        // if (!currentUser.id || currentUser.role === 'Customer') {
-        //     return new NextResponse('Unauthorized', { status: 401 });
-        // }
+        if (!params.reservationId) {
+            return new NextResponse('Reservervation Id is requried', { status: 400 });
+        }
 
-        // if (!params.billboardId) {
-        //     return new NextResponse('Billboard Id is requried', { status: 400 });
-        // }
+        const reservation = await db.reservation.delete({
+            where: {
+                id: params.reservationId,
+                userId: currentUser.id,
+            },
+        });
 
-        return NextResponse.json('success');
+        return NextResponse.json(reservation);
     } catch (error) {
         console.log(['RESERVATIONS_DELETE'], error);
         return new NextResponse('Internal error', { status: 500 });

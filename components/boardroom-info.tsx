@@ -6,33 +6,19 @@ import {
     CirclePlus,
     CircleX,
     Clock,
-    EllipsisVertical,
     HistoryIcon,
-    Link,
     MicVocal,
     Monitor,
-    User2Icon,
     Users,
     WifiIcon,
 } from 'lucide-react';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
 import { FaBlenderPhone, FaChalkboardTeacher } from 'react-icons/fa';
 
 import { Amenities } from '@prisma/client';
 import AmenityItem from './aminity-item';
-import { BsPeople } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import { ReservationFilters } from '@/types';
 import ReservationsContainer from './reservations-container';
-import SearchInput from './navigation/search-input';
 import { cn } from '@/lib/utils';
 import useReserveModal from '@/hooks/reservations/use-reserve-modal';
 
@@ -42,10 +28,9 @@ interface BoardroomInfoProps {
               images: ImageType[];
           })
         | null;
-    params: ReservationFilters;
 }
 
-const BoardroomInfo = ({ data, params }: BoardroomInfoProps) => {
+const BoardroomInfo = ({ data }: BoardroomInfoProps) => {
     const reserveModal = useReserveModal();
 
     const amenitiesIcons = {

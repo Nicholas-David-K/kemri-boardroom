@@ -3,10 +3,12 @@
 import { Copy, MoreHorizontal, Trash } from 'lucide-react';
 import {
     DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { AlertModal } from '@/components/modals/alert-modal';
@@ -14,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { ReservationColumn } from './columns';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { useState } from 'react';
+import { useReservationsQuery } from '@/hooks/reservations/use-reservations-query';
 
 interface CellActionProps {
     data: ReservationColumn;
@@ -26,10 +28,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const { refetch } = useReservationsQuery({ queryKey: 'fetch-reservations' });
+
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
         toast.success('Reservation id copied to the clipboard');
     };
+
+    useEffect(() => {
+        if (open) {
+            const timer = setTimeout(() => {
+                document.body.style.pointerEvents = '';
+            }, 0);
+
+            return () => clearTimeout(timer);
+        } else {
+            document.body.style.pointerEvents = 'auto';
+        }
+    }, [open]);
 
     const onDelete = async () => {
         try {
@@ -42,6 +58,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         } finally {
             setLoading(false);
             setOpen(false);
+            refetch();
             router.refresh();
         }
     };
@@ -76,7 +93,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                         <Copy className="mr-2 h-4 w-4" />
                         Update
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(true)}>
+                    <DropdownMenuItem onClick={() => setOpen(!open)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                     </DropdownMenuItem>

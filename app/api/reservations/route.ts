@@ -15,14 +15,11 @@ export async function GET(req: Request) {
             query.boardroomId = boardroomId;
         }
 
-        // query.date = {
-        //     gte: today,
-        // };
-
         const reservations = await db.reservation.findMany({
             where: query,
             include: {
                 boardroom: true,
+                user: true,
             },
             orderBy: {
                 date: 'asc',
