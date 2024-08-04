@@ -1,7 +1,7 @@
 'use client';
 
 import { Amenities, Boardroom, Image as ImageType, Locations } from '@prisma/client';
-import { CheckCheck, Loader2 } from 'lucide-react';
+import { CheckCheck, Loader } from 'lucide-react';
 import {
     Form,
     FormControl,
@@ -306,7 +306,7 @@ const BoardroomForm = ({ initialData }: BoardroomFormProps) => {
                         className="ml-auto rounded-sm mt-10"
                         type="submit"
                     >
-                        {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                        {isLoading && <Loader className="h-4 w-4 mr-2 animate-spin" />}
                         {!isLoading && <CheckCheck className="h-4 w-4 mr-2" />} {action}
                     </Button>
                 </form>

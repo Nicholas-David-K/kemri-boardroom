@@ -32,6 +32,7 @@ export const useReservationsQuery = ({
     const { data, status, refetch } = useQuery({
         queryKey: [queryKey],
         queryFn: fetchReservations,
+        refetchOnMount: true,
     });
 
     useEffect(() => {

@@ -30,11 +30,11 @@ export const columns: ColumnDef<ReservationColumn>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex  items-center space-x-2 min-w-[270px]">
-                    <div className="h-10 w-10 flex flex-col items-center justify-center bg-white-bg rounded-full">
+                    <div className="h-10 w-10 flex flex-col items-center justify-center bg-white-bg rounded-full border">
                         <FaUserAlt className="h-4 w-4 text-icon" />
                     </div>
-                    <div className="flex flex-col">
-                        <p className="font-medium">{row.original.user.name}</p>
+                    <div className="flex flex-col -space-y-1.5">
+                        <p className="font-bold">{row.original.user.name}</p>
                         <p>{row.original.user.email}</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ export const columns: ColumnDef<ReservationColumn>[] = [
     },
     {
         accessorKey: 'createdAt',
-        header: 'Reserved date',
+        header: 'Booked',
     },
     {
         accessorKey: 'status',
@@ -100,6 +100,9 @@ export const columns: ColumnDef<ReservationColumn>[] = [
                     {row.original.status}
                 </Badge>
             );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
         },
     },
     {

@@ -1,6 +1,6 @@
 'use client';
 
-import { EyeIcon, EyeOffIcon, Loader2 } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Loader } from 'lucide-react';
 import {
     Form,
     FormControl,
@@ -209,7 +209,7 @@ export default function LoginPage() {
         //                             className="w-full rounded-sm"
         //                             onClick={form.handleSubmit(onSubmit)}
         //                         >
-        //                             {isLoading && <Loader2 className="h-5 w-5 animate-spin mr-2" />}
+        //                             {isLoading && <Loader className="h-5 w-5 animate-spin mr-2" />}
         //                             Continue
         //                         </Button>
         //                         <span className="text-xs text-neutral-900 text-center">
@@ -348,7 +348,7 @@ export default function LoginPage() {
                                     className="rounded-sm"
                                     onClick={form.handleSubmit(onSubmit)}
                                 >
-                                    {isLoading && <Loader2 className="h-5 w-5 animate-spin mr-2" />}
+                                    {isLoading && <Loader className="h-5 w-5 animate-spin mr-2" />}
                                     Login
                                 </Button>
                                 <span className="text-xs text-neutral-900 text-center">

@@ -26,11 +26,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { meetingTypes, reservationStatuses } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { Input } from '@/components/ui/input';
-import { reservationStatuses } from '@/lib/utils';
 import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
@@ -48,6 +48,8 @@ export function DataTable<TData, TValue>({
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
+    const [rowSelection, setRowSelection] = useState({});
+
     const table = useReactTable({
         data,
         columns,
@@ -58,9 +60,14 @@ export function DataTable<TData, TValue>({
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+
+        onRowSelectionChange: setRowSelection,
+        enableRowSelection: true,
+
         state: {
             columnFilters,
             sorting,
+            rowSelection,
             columnVisibility,
         },
     });
@@ -69,20 +76,25 @@ export function DataTable<TData, TValue>({
         <div>
             <div className="flex items-center py-4">
                 <div className="flex items-center space-x-3">
+                    <Input
+                        placeholder="Search"
+                        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+                        onChange={(event) =>
+                            table.getColumn(searchKey)?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
                     <DataTableFacetedFilter
                         title="Status"
                         column={table.getColumn('status')}
                         options={reservationStatuses}
                     />
+                    <DataTableFacetedFilter
+                        title="Meeting type"
+                        column={table.getColumn('type')}
+                        options={meetingTypes}
+                    />
                 </div>
-                <Input
-                    placeholder="Search"
-                    value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
-                    onChange={(event) =>
-                        table.getColumn(searchKey)?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">

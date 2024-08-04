@@ -87,6 +87,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         <CommandGroup>
                             {options.map((option) => {
                                 const isSelected = selectedValues.has(option.value);
+
                                 return (
                                     <CommandItem
                                         key={option.value}
@@ -101,19 +102,20 @@ export function DataTableFacetedFilter<TData, TValue>({
                                                 filterValues.length ? filterValues : undefined
                                             );
                                         }}
+                                        className="flex items-center"
                                     >
                                         <div
                                             className={cn(
-                                                'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                                                'mr-2 flex h-4 w-4 items-center rounded-sm border border-slate-300',
                                                 isSelected
                                                     ? 'bg-primary text-primary-foreground'
-                                                    : 'opacity-50 [&_svg]:invisible'
+                                                    : 'opacity-80 [&_svg]:invisible'
                                             )}
                                         >
                                             <CheckIcon className={cn('h-4 w-4')} />
                                         </div>
                                         {option.icon && (
-                                            <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                            <option.icon className="mr-2 h-4 w-4 text-icon text-muted-foreground" />
                                         )}
                                         <span>{option.label}</span>
                                         {facets?.get(option.value) && (

@@ -40,10 +40,12 @@ export function getFormattedMeetingTime(meetingDateUTC: string, durationMinutes:
 export const meetingTypes = [
     {
         label: 'Hybrid',
+        value: 'Hybrid',
         icon: Wifi,
     },
     {
         label: 'Physical',
+        value: 'Physical',
         icon: FaPeopleRoof,
     },
 ];
@@ -103,17 +105,17 @@ export const durations = [
 
 export const reservationStatuses = [
     {
-        value: 'pending',
+        value: 'Pending',
         label: 'Pending',
         icon: Clock,
     },
     {
-        value: 'cancelled',
+        value: 'Cancelled',
         label: 'Cancelled',
         icon: CircleX,
     },
     {
-        value: 'approved',
+        value: 'Approved',
         label: 'Approved',
         icon: CheckCheck,
     },

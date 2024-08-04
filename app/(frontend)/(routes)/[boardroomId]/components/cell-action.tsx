@@ -14,6 +14,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { AlertModal } from '@/components/modals/alert-modal';
 import { Button } from '@/components/ui/button';
 import { ReservationColumn } from './columns';
+import { Separator } from '@/components/ui/separator';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useReservationsQuery } from '@/hooks/reservations/use-reservations-query';
@@ -25,7 +26,8 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     const router = useRouter();
     const params = useParams();
-    const [open, setOpen] = useState(false);
+    const [onDelete, setOnDelete] = useState(false);
+    const [onApprove, setOnApprove] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const { refetch } = useReservationsQuery({ queryKey: 'fetch-reservations' });
@@ -36,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     };
 
     useEffect(() => {
-        if (open) {
+        if (onDelete || onApprove) {
             const timer = setTimeout(() => {
                 document.body.style.pointerEvents = '';
             }, 0);
@@ -45,9 +47,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         } else {
             document.body.style.pointerEvents = 'auto';
         }
-    }, [open]);
+    }, [onDelete, onApprove]);
 
-    const onDelete = async () => {
+    const onDeleteReservation = async () => {
         try {
             setLoading(true);
             await axios.delete(`/api/reservations/${data.id}`);
@@ -57,7 +59,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             toast.error('Something went wrong! Please try again');
         } finally {
             setLoading(false);
-            setOpen(false);
+            setOnDelete(false);
+            refetch();
+            router.refresh();
+        }
+    };
+
+    const onApproveReservation = async () => {
+        try {
+            setLoading(true);
+            // await axios.delete(`/api/reservations/${data.id}`);
+            toast.success('Reservation approved.');
+            router.refresh();
+        } catch (error) {
+            toast.error('Something went wrong! Please try again');
+        } finally {
+            setLoading(false);
+            setOnApprove(false);
             refetch();
             router.refresh();
         }
@@ -66,11 +84,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     return (
         <>
             <AlertModal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                onConfirm={onDelete}
+                isOpen={onDelete}
+                onClose={() => setOnDelete(false)}
+                onConfirm={onDeleteReservation}
                 loading={loading}
-                body="You are about to delete a reservation. This action is irreversible and will permanently remove the reservation from the system. Please confirm that you want to proceed."
+                isDelete={true}
+                title="Delete reservation! Are you sure?"
+                subtitle="This action cannot be undone"
+                body="You are about to delete a reservation. This action is irreversible and will permanently remove the reservation from the system. Do you want to proceed?"
+            />
+
+            <AlertModal
+                isOpen={onApprove}
+                onClose={() => setOnApprove(false)}
+                onConfirm={onApproveReservation}
+                loading={loading}
+                title="Approve reservation?"
+                subtitle="This action cannot be undone"
+                body="You are about to approve this reservation. The owner of the reservation will be notified of your approval. Do you want to proceed?"
+                isDelete={false}
             />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -85,15 +117,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                         <Copy className="mr-2 h-4 w-4" />
                         Copy Id
                     </DropdownMenuItem>
+
+                    <Separator />
                     <DropdownMenuItem
                         onClick={() =>
                             router.push(`/manage/${params?.storeId}/capacities/${data.id}`)
                         }
                     >
                         <Copy className="mr-2 h-4 w-4" />
-                        Update
+                        Cancel reservation
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(!open)}>
+
+                    <DropdownMenuItem onClick={() => setOnApprove(true)}>
+                        <Copy className="mr-2 h-4 w-4" />
+                        Approve reservation
+                    </DropdownMenuItem>
+                    <Separator />
+
+                    <DropdownMenuItem onClick={() => setOnDelete(true)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                     </DropdownMenuItem>

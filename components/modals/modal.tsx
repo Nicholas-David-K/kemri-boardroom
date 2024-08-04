@@ -11,7 +11,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { Separator } from '../ui/separator';
 
 type ModalProps = {
@@ -25,7 +25,7 @@ type ModalProps = {
     description?: string;
     actionLabel?: string;
     disabled?: boolean;
-    showLogo?: boolean;
+    stick?: boolean;
     isLoading?: boolean;
     secondaryAction?: () => void;
     secondaryActionLabel?: string;
@@ -35,10 +35,9 @@ type ModalProps = {
 const Modal = ({
     isOpen,
     onClose,
-    showLogo,
-    isLoading,
     onSubmit,
     title,
+    stick,
     body,
     footer,
     disabled,
@@ -47,6 +46,7 @@ const Modal = ({
     actionLabel,
     secondaryAction,
     secondaryActionLabel,
+    isLoading,
     isDelete,
 }: ModalProps) => {
     const [showModal, setShowModal] = useState(isOpen);
@@ -87,7 +87,14 @@ const Modal = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent
+                className="sm:max-w-[600px]"
+                onInteractOutside={(e) => {
+                    if (stick) {
+                        e.preventDefault();
+                    }
+                }}
+            >
                 <DialogHeader>
                     <DialogTitle className="font-bold text-3xl">{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
@@ -119,8 +126,8 @@ const Modal = ({
                                     className="w-full"
                                     onClick={handleSubmit}
                                 >
-                                    {false && (
-                                        <Loader2 className="h-5 w-5 py-5 text-white animate-spin mr-2" />
+                                    {isLoading && (
+                                        <Loader className="h-4 w-4 text-white animate-spin mr-2" />
                                     )}
                                     {actionLabel}
                                 </Button>
