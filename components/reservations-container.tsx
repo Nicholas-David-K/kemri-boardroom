@@ -4,6 +4,8 @@ import { Loader } from 'lucide-react';
 import { ReservationColumn } from '@/app/(frontend)/(routes)/[boardroomId]/components/columns';
 import ReservationsClient from '@/app/(frontend)/(routes)/[boardroomId]/components/client';
 import { format } from 'date-fns';
+import { getCurrentUser } from '@/actions/get-current-user';
+import { useCurrentUser } from '@/hooks/auth/use-current-user';
 import { useMemo } from 'react';
 import { useReservationsQuery } from '@/hooks/reservations/use-reservations-query';
 
@@ -12,6 +14,8 @@ interface ReservationsContainerProps {
 }
 
 const ReservationsContainer = ({ boardroomId }: ReservationsContainerProps) => {
+    const currentUser = useCurrentUser();
+
     const filters = useMemo(
         () => ({
             boardroomId,
@@ -46,6 +50,7 @@ const ReservationsContainer = ({ boardroomId }: ReservationsContainerProps) => {
             createdAt: format(item.createdAt, 'MMMM do, yyyy'),
             boardroom: item.boardroom,
             user: item.user,
+            isApprover: item.boardroom.approver === currentUser.email,
         })
     );
 

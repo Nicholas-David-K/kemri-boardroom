@@ -5,9 +5,11 @@ import { format, isToday } from 'date-fns';
 
 import { Badge } from '@/components/ui/badge';
 import { BellRing } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { CellAction } from './cell-action';
 import { ColumnDef } from '@tanstack/react-table';
 import { FaUserAlt } from 'react-icons/fa';
+import ManageAction from './manage-action';
 import { ReservationItem } from '@/types';
 import { getFormattedMeetingTime } from '@/lib/utils';
 
@@ -22,11 +24,13 @@ export type ReservationColumn = {
     createdAt: string;
     user: User;
     boardroom: ReservationItem;
+    isApprover: boolean;
 };
 
 export const columns: ColumnDef<ReservationColumn>[] = [
     {
         accessorKey: 'user',
+        header: 'Reserved by',
         cell: ({ row }) => {
             return (
                 <div className="flex  items-center space-x-2 min-w-[270px]">
@@ -46,7 +50,7 @@ export const columns: ColumnDef<ReservationColumn>[] = [
         header: 'Meeting name',
         cell: ({ row }) => {
             return (
-                <div className="flex items-center space-x-2 min-w-[250px]">
+                <div className="flex items-center space-x-2 min-w-[180px]">
                     <span className="font-semibold">{row.getValue('name')}</span>
                     {isToday(new Date(row.getValue('date'))) && (
                         <BellRing className="h-4 w-4 text-primary-500" />
@@ -103,6 +107,13 @@ export const columns: ColumnDef<ReservationColumn>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: 'id',
+        header: '',
+        cell: ({ row }) => {
+            return <>{row.original.isApprover && <ManageAction data={row.original} />}</>;
         },
     },
     {

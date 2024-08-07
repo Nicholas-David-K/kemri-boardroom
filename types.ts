@@ -19,5 +19,6 @@ export interface ReservationItem {
     type: MeetingType;
     createdAt: string;
     meetingLink: string;
+    approver: string;
     boardroom: Boardroom;
 }

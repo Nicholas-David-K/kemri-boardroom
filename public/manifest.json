@@ -4,8 +4,8 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "KEMRI Boardroom Boooking",
-    "short_name": "KEMRI Boardroom Booking",
+    "name": "KEMRI",
+    "short_name": " Boardroom Booking",
     "icons": [
         {
             "src": "../icons/icon-192x192.png",

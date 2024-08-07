@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import ManageReservationModal from '@/components/modals/manage-reservation-modal';
 import ReserveModal from '@/components/modals/reserve-modal';
 import { SuccessModal } from '@/components/modals/success-modal';
 
@@ -20,6 +21,7 @@ export const ModalProvider = () => {
         <>
             <ReserveModal />
             <SuccessModal />
+            <ManageReservationModal />
         </>
     );
 };
